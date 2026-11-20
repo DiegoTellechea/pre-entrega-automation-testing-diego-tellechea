@@ -8,7 +8,7 @@ def iniciar_sesion(driver, wait):
     )
 
     password = wait.until(
-        EC.presence_of_element_located((By.ID, "password"))
+        EC.presence_of_element_located((By.ID, "password")) 
     )
 
     boton_login = wait.until(
