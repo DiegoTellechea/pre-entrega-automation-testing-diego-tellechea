@@ -24,6 +24,10 @@ class LoginPage:
             EC.element_to_be_clickable((By.ID, "login-button"))
         ).click()
 
+    def get_error_message(self):
+        text_error = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,".error > h3")))
+        return text_error.text
+    
     def login(self, usuario, password):
         self.ingresar_usuario(usuario)
         self.ingresar_password(password)
