@@ -2,6 +2,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from utils.logger import logger
 
 
 class InventoryPage:
@@ -11,64 +12,49 @@ class InventoryPage:
         self.wait = WebDriverWait(driver, 10)
 
     def obtener_productos(self):
-        return self.driver.find_elements(
+        logger.info("Obteniendo lista de productos del inventario")
+
+        productos = self.driver.find_elements(
             By.CLASS_NAME, "inventory_item"
         )
 
+        logger.info(f"Productos encontrados: {len(productos)}")
+        return productos
+
     def obtener_nombre_primer_producto(self):
+        logger.info("Obteniendo nombre del primer producto")
+
         productos = self.obtener_productos()
 
-        return productos[0].find_element(
+        nombre = productos[0].find_element(
             By.CLASS_NAME, "inventory_item_name"
         ).text
 
+        logger.info(f"Nombre del primer producto: {nombre}")
+        return nombre
+
     def obtener_precio_primer_producto(self):
+        logger.info("Obteniendo precio del primer producto")
+
         productos = self.obtener_productos()
 
-        return productos[0].find_element(
+        precio = productos[0].find_element(
             By.CLASS_NAME, "inventory_item_price"
         ).text
 
+        logger.info(f"Precio del primer producto: {precio}")
+        return precio
+
     def menu_visible(self):
+        logger.info("Verificando visibilidad del menú")
+
         menu = self.driver.find_element(
             By.ID, "react-burger-menu-btn"
         )
 
-        return menu.is_displayed()
+        visible = menu.is_displayed()
+        logger.info(f"Menú visible: {visible}")
+        return visible
 
     def filtro_visible(self):
-        filtro = self.driver.find_element(
-            By.ID, "product_sort_container"
-        )
-
-        return filtro.is_displayed()
-
-    def agregar_producto(self, nombre):
-        productos = self.obtener_productos()
-
-        for producto in productos:
-            nombre_producto = producto.find_element(
-                By.CLASS_NAME, "inventory_item_name"
-            ).text
-
-            if nombre_producto == nombre:
-                producto.find_element(
-                    By.TAG_NAME, "button"
-                ).click()
-                return
-
-        raise AssertionError(f"No se encontró el producto: {nombre}")
-
-    def obtener_contador_carrito(self):
-        return self.wait.until(
-            EC.visibility_of_element_located(
-                (By.CLASS_NAME, "shopping_cart_badge")
-            )
-        )
-
-    def ir_al_carrito(self):
-        self.wait.until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, "shopping_cart_link")
-            )
-        ).click()
+        logger.info("Verificando visibilidad del filtro")
