@@ -10,6 +10,9 @@ class LoginPage:
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
 
+    def abrir_pagina(self):
+        self.driver.get("https://www.saucedemo.com/")
+
     def ingresar_usuario(self, usuario):
         logger.info("Ingresando nombre de usuario")
 

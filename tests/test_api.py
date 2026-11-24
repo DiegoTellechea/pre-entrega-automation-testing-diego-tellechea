@@ -1,5 +1,6 @@
 
 import requests
+import pytest_check as check
 
 from utils.logger import logger
 
@@ -79,16 +80,19 @@ def test_crear_usuario(base_url, headers):
         # NIVEL 3: ESTRUCTURA
         data = response.json()
 
-        assert "id" in data
-        assert "email" in data
-        assert "first_name" in data
-        assert "last_name" in data
-        logger.info("Estructura de respuesta validada correctamente")
+        # NIVEL 3: ESTRUCTURA
+        check.is_in("id", data)
+        check.is_in("email", data)
+        check.is_in("first_name", data)
+        check.is_in("last_name", data)
+
+        logger.info("Validaciones de estructura ejecutadas")
 
         # NIVEL 4: CONTENIDO
-        assert data["email"] == usuario["email"]
-        assert data["first_name"] == usuario["first_name"]
-        logger.info("Contenido de respuesta validado correctamente")
+        check.equal(data["email"], usuario["email"])
+        check.equal(data["first_name"], usuario["first_name"])
+
+        logger.info("Validaciones de contenido ejecutadas")
 
         # NIVEL 5: TIEMPO DE RESPUESTA
         tiempo = response.elapsed.total_seconds()

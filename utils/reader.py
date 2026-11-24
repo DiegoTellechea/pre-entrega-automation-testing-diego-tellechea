@@ -11,4 +11,4 @@ def read_products_json():
         return json.load(file)
 
 data = read_products_json()
-print(data)   
+   

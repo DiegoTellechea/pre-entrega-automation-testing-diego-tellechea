@@ -27,20 +27,36 @@ def headers():
         }
 
 @pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item,call):
+def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "call" and report.failed: 
+    if report.when == "call" and report.failed:
+
         driver = item.funcargs.get("driver")
 
-        carpeta = pathlib.Path("reports/screenshots")
-        carpeta.mkdir(parents=True,exist_ok=True)
-        archivo = carpeta / f"{item.name}.png"
+        # Solo generar captura si la prueba utiliza Selenium
+        if driver is not None:
 
-        driver.save_screenshot(str(archivo))
+            carpeta = pathlib.Path("reports/screenshots")
+            carpeta.mkdir(parents=True, exist_ok=True)
 
-        imagen = base64.b64encode(archivo.read_bytes()).decode("utf-8")
-        report.extras = [
-            pytest_html.extras.png(imagen, name="Screenshot")
-        ]
+            archivo = carpeta / f"{item.name}.png"
+
+            driver.save_screenshot(str(archivo))
+
+            # Convertir imagen a Base64
+            imagen = base64.b64encode(
+                archivo.read_bytes()
+            ).decode("utf-8")
+
+            # Adjuntar captura al reporte HTML
+            extras = getattr(report, "extras", [])
+            extras.append(
+                pytest_html.extras.png(
+                    imagen,
+                    name="Screenshot"
+                )
+            )
+
+            report.extras = extras

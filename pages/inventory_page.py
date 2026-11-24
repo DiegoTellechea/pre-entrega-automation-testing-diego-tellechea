@@ -58,3 +58,49 @@ class InventoryPage:
 
     def filtro_visible(self):
         logger.info("Verificando visibilidad del filtro")
+
+    def agregar_producto(self, nombre):
+        logger.info(f"Buscando producto para agregar: {nombre}")
+
+        productos = self.obtener_productos()
+
+        for producto in productos:
+            nombre_producto = producto.find_element(
+                By.CLASS_NAME, "inventory_item_name"
+            ).text
+
+            if nombre_producto == nombre:
+                producto.find_element(
+                    By.TAG_NAME, "button"
+                ).click()
+
+                logger.info(f"Producto agregado al carrito: {nombre}")
+                return
+
+        logger.error(f"No se encontró el producto: {nombre}")
+        raise AssertionError(f"No se encontró el producto: {nombre}")
+
+
+    def obtener_contador_carrito(self):
+        logger.info("Obteniendo contador del carrito")
+
+        contador = self.wait.until(
+            EC.visibility_of_element_located(
+                (By.CLASS_NAME, "shopping_cart_badge")
+            )
+        )
+
+        logger.info(f"Cantidad de productos en el carrito: {contador.text}")
+        return contador
+
+    
+    def ir_al_carrito(self):
+        logger.info("Navegando hacia el carrito")
+
+        self.wait.until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, "shopping_cart_link")
+            )
+        ).click()
+
+        logger.info("Se ingresó al carrito correctamente")

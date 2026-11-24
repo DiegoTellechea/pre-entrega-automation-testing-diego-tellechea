@@ -1,0 +1,29 @@
+
+Feature: Inicio de sesion
+
+    Scenario: Inicio de sesion exitoso
+        Given que el usuario este en la pagina del login
+        When ingresa en los campos "standard_user" y "secret_sauce"
+        And hace click en el boton de login
+        Then deberia ingresar al inventario
+
+    Scenario: Login invalido con contraseña incorrecta  
+        Given que el usuario este en la pagina del login
+        When ingresa en los campos "standard_user" y "1234"
+        And hace click en el boton de login
+        Then deberia mostrarse el mensaje de error "Epic sadface: Username and password do not match any user in this service"
+
+    Scenario Outline: Login invalido con diferentes credenciales
+        Given que el usuario este en la pagina del login
+        When ingresa en los campos "<usuario>" y "<password>"
+        And hace click en el boton de login
+        Then deberia mostrarse el mensaje de error "<mensaje>"
+
+            Examples:
+                |usuario|password|mensaje|
+                |standard_user|1234|Epic sadface: Username and password do not match any user in this service|
+                |standart_user|secret_sauce|Epic sadface: Username and password do not match any user in this service|
+                |VACIO|secret_sauce|Epic sadface: Username is required|
+                |standard_user|VACIO|Epic sadface: Password is required|
+
+    
