@@ -1,20 +1,34 @@
-# Python
-__pycache__/
+Python
+
+pycache/
 *.py[cod]
 *$py.class
 
-# Entorno virtual
+Entorno virtual
+
 venv/
 .venv/
 env/
 .env
 
-# Pytest
+Pytest
+
 .pytest_cache/
 
-# Archivos de configuración de VS Code
+Logs
+
+logs/
+*.log
+
+Capturas generadas automáticamente
+
+reports/screenshots/
+
+Archivos de configuración de VS Code
+
 .vscode/
 
-# Archivos del sistema operativo
+Archivos del sistema operativo
+
 .DS_Store
 Thumbs.db
